@@ -5,45 +5,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <style src="assets/css/style.css"></style>
 </head>
 <body>
     <header>
-        <h1>Weather Dashboard</h1>
+        <h1 class="col-12 text-center p-2 bg-info font-weight-bold">Weather Dashboard</h1>
     </header>
-    <main>
-        <div class="left-column">
-            <div class="search-bar">
+    <main class="row justify-space-around">
+        <div id="left-column" class="col-sm-12 col-md-4 col-lg-2">
+            <form id="search-bar"class="card-body">
                 <h2>Search for a City</h2>
-                <input class=search-input placeholder="Brooklyn">
-                <button class=searchbtn type="submit">Search</button>
-            </div>
+                <label class="search-label" for="city-search">Search for a City:</label>
+                <input name="city-search" id="city-search" placeholder="San Diego">
+                <button class="btn bg-primary w-100 mt-3 mb-2">Search</button>
+            </form>
             <div class="saved-locations">
-                <ul class="city-list">
-                    <li class="city-btn">Sample City</li>
-                </ul>
-                <button id="clear-history" class="clear-btn hide">Clear History</button>
+                <div class="city-list"></div>
+                <button id="clear-history" class="btn bg-secondary w-100 mt-3 mb-2 hide">Clear History</button>
             </div>
         </div>
-        <div class="right-column">
+        <div id="right-column" class="col-sm-12 col-md-8 col-lg-10">
             <div class="current-weather">
-                <div class="weather-box"></div>
                 <h3>Current Conditions</h3>
+                <div class="weather-box"></div>
+                
                
             </div>
             <div class="forecast">
                 <h3>5-Day Forecast</h3>
-                <div class="future-weather-cards">
-                    <div class="future-weather-box"></div>
-                    <div class="future-weather-box"></div>
-                    <div class="future-weather-box"></div>
-                    <div class="future-weather-box"></div>
-                    <div class="future-weather-box"></div>
+                <div class="col-sm-12 col-md-8 col-lg-10" id="future-weather-cards">
+                    <div class="col forecast bg-primary text-white ml-3 mb-3" id="future-weather-box"></div>
+                    <div class="col forecast bg-primary text-white ml-3 mb-3" id="future-weather-box"></div>
+                    <div class="col forecast bg-primary text-white ml-3 mb-3" id="future-weather-box"></div>
+                    <div class="col forecast bg-primary text-white ml-3 mb-3" id="future-weather-box"></div>
+                    <div class="col forecast bg-primary text-white ml-3 mb-3" id="future-weather-box"></div>
                 </div>
             </div>
         </div>
     
     </main>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>
