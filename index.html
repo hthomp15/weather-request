@@ -6,47 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <style src="assets/css/style.css"></style>
+    <link rel="stylesheet" href="assets/css/style.css"></link>
 </head>
 <body>
     <header>
-        <h1 class="col-12 text-center p-2 bg-info font-weight-bold">Weather Dashboard</h1>
+        <h1 class="col-12 p-4 font-weight-bold">Weather Dashboard</h1>
     </header>
-    <main class="row justify-space-around">
-        <div id="left-column" class="col-sm-12 col-md-4 col-lg-2">
+    <main class="row justify-content-space-around ml-auto">
+        <div id="left-column" class="col-sm-12 col-md-6 col-lg-4">
             <form id="search-bar"class="card-body">
-                <h2>Search for a City</h2>
-                <label class="search-label" for="city-search">Search for a City:</label>
-                <input name="city-search" id="city-search" placeholder="San Diego">
-                <button class="btn bg-primary w-100 mt-3 mb-2">Search</button>
+                <h2 class="text-center font-weight-bold">Search for a City</h2>
+                <label class="search-label ml-auto" for="city-search">Search for a City:</label>
+                <input class="input" name="city-search" id="city-search" placeholder="San Diego">
+                <button class="searchBtn btn w-100 mt-3 mb-2">Search</button>
             </form>
             <div class="saved-locations">
                 <div class="city-list"></div>
                 <button id="clear-history" class="btn bg-secondary w-100 mt-3 mb-2 hide">Clear History</button>
             </div>
         </div>
-        <div id="right-column" class="col-sm-12 col-md-8 col-lg-10">
-            <div class="current-weather">
-                <h3>Current Conditions</h3>
-                <div class="weather-box">
-                    <h4 class="city-date"></h4>
-                    <img class="icon" src="" alt="">
-                    <p class="temp"></p>
-                    <p class="wind-speed"></p>
-                    <p class="humidity"></p>
-                    <p class="uvi"></span></p>
-                </div>
-                
-               
+        <div id="right-column" class="col-sm-12 col-md-6 col-lg-8">
+            <div class="current-weather container">
+                <div class="row">
+                    <h3 class="container text-center font-weight-bold">Current Conditions</h3>
+                    
+                    <div class="weather-box row justify-content-center text-center">
+                        <h4 class="city-date col-sm-12"></h4>
+                        <img class="icon col-sm-1" src="" alt="">
+                        <p class="temp col-sm-12"></p>
+                        <p class="wind-speed col-sm-12"></p>
+                        <p class="humidity col-sm-12"></p>
+                        <p class="uvi col-sm-12"></p>
+                    </div>
+                </div>  
             </div>
-            <div class="forecast">
-                <h3>5-Day Forecast</h3>
-                <div class="col-sm-12 col-md-8 col-lg-10" id="future-weather-cards">
-                    <div class="col forecast bg-secondary text-white ml-3 mb-3" id="future-weather-box"></div>
-                    <div class="col forecast bg-secondary text-white ml-3 mb-3" id="future-weather-box"></div>
-                    <div class="col forecast bg-secondary text-white ml-3 mb-3" id="future-weather-box"></div>
-                    <div class="col forecast bg-secondary text-white ml-3 mb-3" id="future-weather-box"></div>
-                    <div class="col forecast bg-secondary text-white ml-3 mb-3" id="future-weather-box"></div>
+            <div class="forecast container flex">
+                <h3 class="text-center font-weight-bold">5-Day Forecast</h3>
+                <div class="row  text-center p-4 ml-auto" id="future-weather-cards">
+                    <div class="col-sm-12 forecast ml-auto mb-3" id="future-weather-box"></div>
+                    <div class="col-sm-12 forecast ml-auto mb-3" id="future-weather-box"></div>
+                    <div class="col-sm-12 forecast ml-auto mb-3" id="future-weather-box"></div>
+                    <div class="col-sm-12 forecast ml-auto mb-3" id="future-weather-box"></div>
+                    <div class="col-sm-12 forecast ml-auto mb-3" id="future-weather-box"></div>
                 </div>
             </div>
         </div>

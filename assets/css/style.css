@@ -1,3 +1,78 @@
-.hide {
-    display: none;
+body {
+    background-color: rgb(169, 147, 250);
+}
+header h1 {
+    margin-bottom: 0;
+    text-align:left;
+    background-color: slateblue;
+    border-bottom: solid 10px rgb(6, 6, 53);
+}
+.weather-box img {
+    align-content: center;
+    width: 40%;
+}
+.current-weather h3 {
+    margin-bottom: 20px;
+    border-bottom:groove darkcyan 10px;
+    padding: 10px;
+}
+.city-date {
+    font-size: 40px;
+    font-weight: bold;
+}
+.card-body {
+    border-bottom: solid 5px rgb(7, 7, 58);
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+#city-search {
+    border-radius: 5px;
+    
+}
+
+.saveBtn {
+    border-radius: 5px;
+    font-size: larger;
+    font-weight: bold;
+    background-color: rgb(228, 139, 84);
+    text-transform: capitalize;
+}
+#clear-history {
+    font-weight: bolder;
+}
+
+.input {
+    background-color:rgb(211, 211, 211);
+}
+.btn {
+    background-color: rgb(227, 177, 159);
+    font-weight: bolder;
+}
+
+.current-weather {
+    margin-top: 15px;
+}
+.uvi-bg {
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.weather-box p {
+    font-size: larger;
+    font-weight: bold;
+}
+
+#future-weather-cards {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.weather-card {
+    border: solid 3px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: darkcyan;
 }

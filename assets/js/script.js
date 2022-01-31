@@ -151,7 +151,7 @@ var saveHistory = (search)=> {
     var search = cityInputEl.value
     listEl = document.createElement("button");
     listEl.textContent = search;
-    listEl.classList = "d-flex w-100 btn-light border p-2 mt-2"
+    listEl.classList = "saveBtn w-100 btn-light border border-primary text-center p-2 mt-2"
     listEl.setAttribute("type", "submit");
     listEl.setAttribute("data-search", search)
     listCityEl.appendChild(listEl)
@@ -163,11 +163,11 @@ var saveHistory = (search)=> {
 }   
 // Save searches on page refresh
 var getHistory = ()=> {
-    var savedCities = JSON.parse(localStorage.getItem("cities"));
-    
+    var savedCities = JSON.parse(localStorage.getItem("cities")) ?? [];
+
     for (i = 0; i < savedCities.length; i++) {
         var cityEl = document.createElement("button");
-        cityEl.classList = "d-flex w-100 btn-light border p-2 mt-2";
+        cityEl.classList = "saveBtn w-100 btn-light border border-primary text-center p-2 mt-2";
         cityEl.setAttribute("type", "submit");
         cityEl.setAttribute("data-search", savedCities[i]);
         cityEl.textContent = `${savedCities[i]}`;
@@ -184,4 +184,5 @@ clearHistoryBtn.addEventListener("click", function(){
         listCityEl.removeChild(child);
         child = listCityEl.lastElementChild;
     }
+    localStorage.removeItem("cities");
 })
