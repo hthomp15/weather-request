@@ -1,23 +1,24 @@
-var searchbtnEl = document.querySelector("#search-bar")
-var cityInputEl = document.querySelector("#city-search")
-var forecastContainerEl = document.querySelector("#future-weather-cards");
-var searchList = document.querySelector(".saved-locations")
-var listCityEl = document.querySelector(".city-list")
+var searchbtnEl = document.querySelector("#search-bar");
+var cityInputEl = document.querySelector("#city-search");
+var searchList = document.querySelector(".saved-locations");
+var listCityEl = document.querySelector(".city-list");
+var forecastBoxEl = document.querySelectorAll("#future-weather-box");
 
+var cityDateEl = document.querySelector(".city-date");
+var clearHistoryBtn = document.querySelector("#clear-history");
 
-var currentWeatherEl = document.querySelector(".current-weather")
-var currentBox = document.querySelector(".weather-box")
-var uviValue = document.createElement("span")
-var currentWeatherSpanEl = document.createElement("span")
-var cityEl = document.createElement("h4")
+var tempEl = document.querySelector(".temp");
+var windEl = document.querySelector(".wind-speed");
+var humidEl = document.querySelector(".humidity");
+var uviEl = document.querySelector(".uvi");
+var iconEl = document.querySelector(".icon");
+// var uvibgEl = document.querySelector(".uvi-blackground")
 
 var searchCityHandler = function(event) {
     event.preventDefault();
     //console.log(event);
-
     //get value from input element
     var cityName = cityInputEl.value.trim();
-    
     if(cityName) {
         getWeather(cityName);
         saveHistory();
@@ -38,30 +39,33 @@ var pastSearchHandler = function (event) {
 
 // This will display the current weather on the index.html "current-weather"
 var displayCurrentWeather = (weather_data)=>{
-    
-    // console.log(weather_data);
-    currentWeatherSpanEl.innerHTML = `Temperature: ${weather_data.current.temp}°F\nWind Speed: ${weather_data.current.wind_speed}\nHumidity: ${weather_data.current.humidity}\n UV Index:`;
-    uviValue.innerHTML = weather_data.current.uvi;
-    uviValue.setAttribute("class", "uv-index")
-    currentBox.appendChild(currentWeatherSpanEl);
-    currentBox.appendChild(uviValue);
+    var currentWeatherSpanEl = document.createElement("span")
+    var uvibgEl = document.createElement("span")
+    var iconUrl = `http://openweathermap.org/img/w/${weather_data.daily[0].weather[0].icon}.png`
+    iconEl.setAttribute("src", iconUrl);
+    currentWeatherSpanEl.innerHTML = `Temperature: ${weather_data.current.temp}°F\rWind Speed: ${weather_data.current.wind_speed}\rHumidity: ${weather_data.current.humidity}\r UV Index:`;
+    uvibgEl.innerHTML = weather_data.current.uvi;
+    uvibgEl.setAttribute("class", "uvi-bg")
+    tempEl.innerHTML = `Temperature: ${weather_data.current.temp}°F`
+    windEl.innerHTML = `Wind Speed: ${weather_data.current.wind_speed}`
+    humidEl.innerHTML = `Humidity: ${weather_data.current.humidity}`
+    uviEl.textContent = "UV Index: "
+
+    uviEl.appendChild(uvibgEl);
 
     if(weather_data.daily[0].uvi < 2){
-        uviValue.style.backgroundColor = "green";
+        uvibgEl.style.backgroundColor = "green";
         
     }else if (weather_data.daily[0].uvi < 5){
-        uviValue.style.backgroundColor = "yellow";
+        uvibgEl.style.backgroundColor = "yellow";
        
     } else {
-        uviValue.style.backgroundColor = "red";
-        
+        uvibgEl.style.backgroundColor = "red"; 
     }
 }
-
-// Uses first fetch data to display city 
+ 
 // Uses javascript to display date
 var displayCityAndDate = (data1)=>{
-   
     var timeConverter = (timestamp)=>{
         // console.log(timestamp)
         var timestamp = timestamp.dt
@@ -72,20 +76,20 @@ var displayCityAndDate = (data1)=>{
         var date = a.getDate();
         return`${month}/${date}/${year}`;
     }
-    cityEl.textContent = `${data1.name} - ${timeConverter(data1)}`
-    currentBox.appendChild(cityEl);
-    
+    cityDateEl.innerHTML = `${data1.name} - ${timeConverter(data1)}` 
 }
 
-var forecastBoxEl = document.querySelectorAll("#future-weather-box")
 // This will display the 5 day forecast
 var displayExtendedForcast = (future_data)=>{
     // console.log(future_data);
-    for (let i = 0; i < forecastBoxEl.length ; i++ ) {
-        var z = 1;
+    // Loop through forecast divs, create elements, assign data value, append them to the div
+    for (let i = 0; i < forecastBoxEl.length; i++) {
+        var z = i + 1;
+        // Create elements to append to forecase divs
         var dateEl = document.createElement("h4");
-        var forecastEl = document.createElement("span");
-        var uviEl = document.createElement("span");
+        var tempEl = document.createElement("p");
+        var windEl = document.createElement("p");
+        var humidEl = document.createElement("p");
         var iconEl = document.createElement("img");
         var iconUrl = `http://openweathermap.org/img/w/${future_data.daily[z].weather[0].icon}.png`
         forecastBoxEl[i].innerHTML = "";
@@ -98,45 +102,19 @@ var displayExtendedForcast = (future_data)=>{
             var date = a.getDate();
             return`${month}/${date}/${year}`;
         }
-        // cityEl.textContent = `${future_data.name} - ${timeConverter(future_data)}`
-        //  currentBox.appendChild(cityEl);
-        // Create the DOM items to append to the index.html
         dateEl.innerHTML = timeConverter(future_data.daily[i+1].dt);
-        forecastEl.innerHTML = `Temperature: ${future_data.daily[z].temp.day}°F\nWind Speed: ${future_data.daily[z].wind_speed}\nHumidity: ${future_data.daily[z].humidity}\n UV Index:`;
-        uviEl.innerHTML = ` ${future_data.daily[z].uvi}`
-        uviEl.setAttribute("class", "uv-index");
-        // console.log(forecastEl, dateEl)
+        tempEl.innerHTML = `Temperature: ${future_data.daily[z].temp.day}°F`
+        windEl.innerHTML = `Wind Speed: ${future_data.daily[z].wind_speed}`
+        humidEl.innerHTML = `Humidity: ${future_data.daily[z].humidity}`
         iconEl.setAttribute("src", iconUrl)
-        // console.log(iconEl);
-        forecastEl.appendChild(uviEl);
         forecastBoxEl[i].setAttribute("class", "weather-card");
         forecastBoxEl[i].appendChild(dateEl);
         forecastBoxEl[i].appendChild(iconEl);
-        forecastBoxEl[i].appendChild(forecastEl);
-
-        // Conditional to make the uv index background color
-        if(future_data.daily[z].uvi < 2){
-            uviEl.style.backgroundColor = "green";
-            uviEl.style.display = "inline";
-            uviEl.style.padding = "5px";
-            uviEl.style.borderRadius = "10px";
-        }else if (future_data.daily[z].uvi < 5){
-            uviEl.style.backgroundColor = "yellow";
-            uviEl.style.display = "inline";
-            uviEl.style.padding = "5px";
-            uviEl.style.borderRadius = "10px";
-        } else {
-            uviEl.style.backgroundColor = "red";
-            uviEl.style.display = "inline";
-            uviEl.style.padding = "5px";
-            uviEl.style.borderRadius = "10px";
-        }
-        
-    }
-    
+        forecastBoxEl[i].appendChild(tempEl);
+        forecastBoxEl[i].appendChild(windEl);
+        forecastBoxEl[i].appendChild(humidEl);
+    }  
 }
-
-
 // Gets my weather by city name 
 var getWeather = (searchValue)=> {
     var api_key = '1c6a9b4261903a20ca46df884c067f7b';
@@ -151,7 +129,6 @@ var getWeather = (searchValue)=> {
         getExtendedForcast(lat, lon);  
     })
 };
-
 // gets an extended 5 day forecast of a specified location. 
 // use lat and lon of city name fetch as inputs. 
 var getExtendedForcast = (lat, lon)=> {
@@ -168,24 +145,6 @@ var getExtendedForcast = (lat, lon)=> {
 }
 // Array for local storage access
 var cityList = []
-
-// List the array into the search history sidebar
-// function listArray() {
-//     // Empty out the elements in the sidebar
-//     // Repopulate the sidebar with each city
-//     // in the array
-//     cityList.forEach(function(city){
-//         var searchHistoryItem = document.createElement("li").setAttribute("class", "list-item");
-//         searchHistoryItem.attr("data-value", city);
-//         searchHistoryItem.text(city);
-//         searchList.prepend(searchHistoryItem);
-//     });
-//     // Update city list history in local storage
-//     localStorage.setItem("cities", JSON.stringify(cityList));
-    
-// }
-
-
 // Display and save the search history of cities
 var saveHistory = (search)=> {
     // Grab value entered into search bar 
@@ -200,20 +159,29 @@ var saveHistory = (search)=> {
     if (!cityList.includes(search)){
         cityList.push(search);
     }
-    localStorage.setItem("cities", cityList);
+    JSON.parse(localStorage.setItem("cities", JSON.stringify(cityList)));
 }   
-// var getHistory = ()=> {
-//     var savedCities = JSON.parse(localStorage.getItem("cities"));
+// Save searches on page refresh
+var getHistory = ()=> {
+    var savedCities = JSON.parse(localStorage.getItem("cities"));
     
-//     for (i = 0; i < cityList.length; i++) {
-//         var cityEl = document.createElement("li")
-//         cityEl.textContent = `${savedCities[i]}`;
-//         listCityEl.appendChild(cityEl)
-//     }
-// }
-// getHistory()
-
-
+    for (i = 0; i < savedCities.length; i++) {
+        var cityEl = document.createElement("button");
+        cityEl.classList = "d-flex w-100 btn-light border p-2 mt-2";
+        cityEl.setAttribute("type", "submit");
+        cityEl.setAttribute("data-search", savedCities[i]);
+        cityEl.textContent = `${savedCities[i]}`;
+        listCityEl.appendChild(cityEl)
+    }
+}
+getHistory()
 searchbtnEl.addEventListener("submit", searchCityHandler);
 searchList.addEventListener("click", pastSearchHandler);
-  
+clearHistoryBtn.addEventListener("click", function(){
+    // console.log(listCityEl.childNodes)
+    var child = listCityEl.lastElementChild;
+    while (child) {
+        listCityEl.removeChild(child);
+        child = listCityEl.lastElementChild;
+    }
+})
