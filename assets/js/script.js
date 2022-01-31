@@ -1,6 +1,9 @@
 var searchbtnEl = document.querySelector(".searchbtn")
 var cityInputEl = document.querySelector(".search-input")
 var forecastContainerEl = document.querySelector(".future-weather-cards");
+var searchList = document.querySelector(".saved-locations")
+var listCityEl = document.querySelector(".city-list")
+
 
 var currentWeatherEl = document.querySelector(".current-weather")
 var currentBox = document.querySelector(".weather-box")
@@ -13,38 +16,23 @@ var cityEl = document.createElement("h4")
 // This will display the current weather on the index.html "current-weather"
 var displayCurrentWeather = (weather_data)=>{
     
-    // var tempEl = document.querySelector(".temp");
-    // var windEl = document.querySelector(".wind");
-    // var humidEl = document.querySelector(".humid");
-    // var uviContainerEl = document.querySelector(".uvi");
-    
-
     // console.log(weather_data);
     currentWeatherSpanEl.innerHTML = `Temperature: ${weather_data.current.temp}°F\nWind Speed: ${weather_data.current.wind_speed}\nHumidity: ${weather_data.current.humidity}\n UV Index:`;
-    // tempEl.textContent += `${weather_data.current.temp}°F`;
-    // windEl.textContent += `${weather_data.current.wind_speed}mph`;
-    // humidEl.textContent += `${weather_data.current.humidity}%`;
     uviValue.innerHTML = weather_data.current.uvi;
+    uviValue.setAttribute("class", "uv-index")
     currentBox.appendChild(currentWeatherSpanEl);
     currentBox.appendChild(uviValue);
-    // uviContainerEl.appendChild(uviValue);
+
     if(weather_data.daily[0].uvi < 2){
         uviValue.style.backgroundColor = "green";
-        uviValue.style.display = "inline";
-        uviValue.style.padding = "5px";
-        uviValue.style.borderRadius = "10px";
+        
     }else if (weather_data.daily[0].uvi < 5){
         uviValue.style.backgroundColor = "yellow";
-        uviValue.style.display = "inline";
-        uviValue.style.padding = "5px";
-        uviValue.style.borderRadius = "10px";
+       
     } else {
         uviValue.style.backgroundColor = "red";
-        uviValue.style.display = "inline";
-        uviValue.style.padding = "5px";
-        uviValue.style.borderRadius = "10px";
+        
     }
-    
 }
 
 // Uses first fetch data to display city 
@@ -87,10 +75,13 @@ var displayExtendedForcast = (future_data)=>{
             var date = a.getDate();
             return`${month}/${date}/${year}`;
         }
+        // cityEl.textContent = `${future_data.name} - ${timeConverter(future_data)}`
+        //  currentBox.appendChild(cityEl);
         // Create the DOM items to append to the index.html
         dateEl.innerHTML = timeConverter(future_data.daily[i+1].dt);
         forecastEl.innerHTML = `Temperature: ${future_data.daily[z].temp.day}°F\nWind Speed: ${future_data.daily[z].wind_speed}\nHumidity: ${future_data.daily[z].humidity}\n UV Index:`;
         uviEl.innerHTML = ` ${future_data.daily[z].uvi}`
+        uviEl.setAttribute("class", "uv-index");
         // console.log(forecastEl, dateEl)
         iconEl.setAttribute("src", iconUrl)
         // console.log(iconEl);
@@ -128,9 +119,9 @@ var saveSearch = ()=> {
 }
 
 // Gets my weather by city name 
-var getWeather = ()=> {
+var getWeather = (searchValue)=> {
     var api_key = '1c6a9b4261903a20ca46df884c067f7b';
-    var weatherData = `http://api.openweathermap.org/data/2.5/weather?appid=${api_key}&q=${cityInputEl.value}&units=imperial`;
+    var weatherData = `http://api.openweathermap.org/data/2.5/weather?appid=${api_key}&q=${searchValue}&units=imperial`;
     fetch(weatherData).then(function(response) {
          return response.json();
     }).then(function(data) {
@@ -156,5 +147,67 @@ var getExtendedForcast = (lat, lon)=> {
         displayExtendedForcast(data);
     })
 }
+// Array for local storage access
+var cityList = []
 
-searchbtnEl.addEventListener("click", getWeather);
+// List the array into the search history sidebar
+function listArray() {
+    // Empty out the elements in the sidebar
+    // Repopulate the sidebar with each city
+    // in the array
+    cityList.forEach(function(city){
+        var searchHistoryItem = document.createElement("li").setAttribute("class", "list-item");
+        searchHistoryItem.attr("data-value", city);
+        searchHistoryItem.text(city);
+        searchList.prepend(searchHistoryItem);
+    });
+    // Update city list history in local storage
+    localStorage.setItem("cities", JSON.stringify(cityList));
+    
+}
+
+
+// Display and save the search history of cities
+var saveHistory = (search)=> {
+    // Grab value entered into search bar 
+    var search = cityInputEl.value
+    listEl = document.createElement("li")
+    listEl.innerHTML = search
+    listCityEl.appendChild(listEl)
+
+    if (!cityList.includes(search)){
+        cityList.push(search);
+    }
+    localStorage.setItem("cities", cityList);
+}   
+    
+function initalizeHistory() {
+    if (localStorage.getItem("cities")) {
+        cityList = JSON.parse(localStorage.getItem("cities"));
+        var lastIndex = cityList.length - 1;
+        console.log(cityList);
+        listArray();
+        // Display the last city viewed
+        // if page is refreshed
+        if (cityList.length !== 0) {
+            currentConditionsRequest(cityList[lastIndex]);
+        }
+    }
+}
+
+searchbtnEl.addEventListener("click", function(event){
+    var city = cityInputEl.value.trim();
+    getWeather(city)
+    saveHistory(city)
+});
+
+initalizeHistory()
+// Clicking on a button in the search history sidebar
+// will populate the dashboard with info on that city
+searchList.addEventListener("click", function(event) {
+    console.log(event)
+    // var value = event.data("value");
+    getWeather(value);
+    saveHistory(value); 
+
+});
