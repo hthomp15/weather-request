@@ -15,6 +15,7 @@ var iconEl = document.querySelector(".icon");
 // var uvibgEl = document.querySelector(".uvi-blackground")
 
 var searchCityHandler = function(event) {
+    console.log(event);
     event.preventDefault();
     //console.log(event);
     //get value from input element
@@ -22,10 +23,12 @@ var searchCityHandler = function(event) {
     if(cityName) {
         getWeather(cityName);
         saveHistory();
+        clearText(event);
         cityInputEl.value = "";
     } else {
         alert("Plaese enter a city name")
     }
+    
 }
 
 var pastSearchHandler = function (event) {
