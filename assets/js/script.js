@@ -44,7 +44,7 @@ var pastSearchHandler = function (event) {
 var displayCurrentWeather = (weather_data)=>{
     var currentWeatherSpanEl = document.createElement("span")
     var uvibgEl = document.createElement("span")
-    var iconUrl = `http://openweathermap.org/img/w/${weather_data.daily[0].weather[0].icon}.png`
+    var iconUrl = `https://openweathermap.org/img/w/${weather_data.daily[0].weather[0].icon}.png`
     iconEl.setAttribute("src", iconUrl);
     currentWeatherSpanEl.innerHTML = `Temperature: ${weather_data.current.temp}°F\rWind Speed: ${weather_data.current.wind_speed}\rHumidity: ${weather_data.current.humidity}\r UV Index:`;
     uvibgEl.innerHTML = weather_data.current.uvi;
@@ -94,7 +94,7 @@ var displayExtendedForcast = (future_data)=>{
         var windEl = document.createElement("p");
         var humidEl = document.createElement("p");
         var iconEl = document.createElement("img");
-        var iconUrl = `http://openweathermap.org/img/w/${future_data.daily[z].weather[0].icon}.png`
+        var iconUrl = `https://openweathermap.org/img/w/${future_data.daily[z].weather[0].icon}.png`
         forecastBoxEl[i].innerHTML = "";
         function timeConverter(timestamp){
             // console.log(timestamp)
@@ -121,7 +121,7 @@ var displayExtendedForcast = (future_data)=>{
 // Gets my weather by city name 
 var getWeather = (searchValue)=> {
     var api_key = '1c6a9b4261903a20ca46df884c067f7b';
-    var weatherData = `http://api.openweathermap.org/data/2.5/weather?appid=${api_key}&q=${searchValue}&units=imperial`;
+    var weatherData = `https://api.openweathermap.org/data/2.5/weather?appid=${api_key}&q=${searchValue}&units=imperial`;
     fetch(weatherData).then(function(response) {
          return response.json();
     }).then(function(data) {
